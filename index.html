@@ -3,179 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitalink Dashboard UI</title>
-    <link rel="icon" href="./assets/vitaicon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="styles.css">
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Supplier Risk Assessment</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background-color: #f4f4f4; 
+        }
+        input { 
+            padding: 8px; 
+            margin: 10px; 
+            width: 300px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+        }
+        button { 
+            padding: 10px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        #result { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 1px solid #ccc; 
+            background: white; 
+            display: inline-block; 
+            text-align: left;
+            min-width: 300px;
+            border-radius: 5px;
+        }
+        .error { color: red; }
+    </style>
 </head>
 <body>
-    <div class="background-dots"></div>
-    <div id="particles-js"></div>
-    <div id="three-container"></div>
 
-    <div class="main">
-        <!-- Top Navigation Bar -->
-        <div class="navbar">
-            <!-- Left Icons -->
-            <div class="navbar-left">
-                <div class="icon">
-                    <img src="./assets/vitaicon.png">
-                </div>
-            </div>
+    <h2>Supplier Risk Assessment</h2>
+    <input type="text" id="supplierId" placeholder="Enter Supplier ID">
+    <button onclick="getRisk()">Check Risk</button>
+    <button onclick="downloadReport()">Download Report</button>
 
-            <div class="searchbarr">
-                <input type="text" placeholder="Search here..." class="search-bar">
-            </div>
+    <div id="result"></div>
 
-            <!-- Right Profile & Notifications -->
-            <div class="navbar-right">
-                <button class="top-right-button button-tooltip" data-tooltip="Notifications">
-                    <i class="fa-solid fa-bell"></i>
-                </button>
-                <button class="top-right-button button-tooltip" data-tooltip="Chat with us">
-                    <i class="fa-regular fa-message"></i>
-                </button>
-                <button class="top-right-button button-tooltip" data-tooltip="Profile" onclick="window.location.href='profile.html'">
-                    <i class="fa-solid fa-user"></i>
-                </button>
-            </div>
-        </div>
+    <script>
+        async function getRisk() {
+            const supplierId = document.getElementById("supplierId").value.trim();
+            if (!supplierId) {
+                alert("Please enter a Supplier ID");
+                return;
+            }
 
-        <!-- What We Do Section First -->
-        <div class="section-container">
-            <p class="section-title">What We Do at Vitalink</p>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>Secure Supply Chain</h3>
-                    <p>Leveraging blockchain technology to ensure end-to-end traceability and authenticity of medical supplies.</p>
-                </div>
-                <div class="benefit-card">
-                    <i class="fas fa-temperature-high"></i>
-                    <h3>Real-time Monitoring</h3>
-                    <p>Advanced IoT sensors track temperature, humidity, and handling conditions throughout transit.</p>
-                </div>
-                <div class="benefit-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Data Analytics</h3>
-                    <p>Comprehensive analytics and reporting for supply chain optimization and compliance verification.</p>
-                </div>
-                <div class="benefit-card">
-                    <i class="fas fa-clock"></i>
-                    <h3>Time-Critical Delivery</h3>
-                    <p>Specialized handling for time-sensitive medical supplies with real-time tracking and alerts.</p>
-                </div>
-            </div>
-        </div>
+            try {
+                const response = await fetch(`http://localhost:5001/api/suppliers/${supplierId}/risk`);
+                const data = await response.json();
 
-        <!-- Dashboard Metrics Section -->
-        <div class="dashboard-cards">
-            <!-- Orders Card -->
-            <div class="card">
-                <p class="card-title">Orders</p>
-                <p class="card-value">1</p>
-                <a href="orders.html" class="btn">View Orders</a>
-            </div>
+                if (response.ok) {
+                    document.getElementById("result").innerHTML = `
+                        <h3>Risk Assessment</h3>
+                        <p><strong>Name:</strong> ${data.name}</p>
+                        <p><strong>Risk Score:</strong> ${data.riskScore}</p>
+                        <p><strong>Risk Level:</strong> <span style="color:${getRiskColor(data.riskLevel)}">${data.riskLevel}</span></p>
+                        <p><strong>Risk Factors:</strong></p>
+                        <ul>
+                            <li>Delivery Performance: ${formatScore(data.riskFactors.deliveryPerformance)}</li>
+                            <li>Quality Score: ${formatScore(data.riskFactors.qualityScore)}</li>
+                            <li>Financial Health: ${formatScore(data.riskFactors.financialHealth)}</li>
+                            <li>Compliance Score: ${formatScore(data.riskFactors.complianceScore)}</li>
+                        </ul>
+                        <p><small>Assessment Date: ${new Date(data.assessmentDate).toLocaleDateString()}</small></p>
+                    `;
+                } else {
+                    document.getElementById("result").innerHTML = 
+                        `<p class="error">Error: ${data.message || 'Supplier not found'}</p>
+                         <p>Status Code: ${response.status}</p>`;
+                }
+            } catch (error) {
+                document.getElementById("result").innerHTML = 
+                    `<p class="error">Error: ${error.message}</p>
+                     <p>This might mean the server is not running or there's a network issue.</p>`;
+            }
+        }
 
-            <!-- Active Shipments Card -->
-            <div class="card">
-                <p class="card-title">Active Shipments</p>
-                <p class="card-value">0</p>
-                <a href="shipments.html" class="btn">Track</a>
-            </div>
+        function formatScore(score) {
+            return score !== undefined ? score.toFixed(2) : "N/A";
+        }
 
-            <!-- Alerts Card -->
-            <div class="card">
-                <p class="card-title">Alerts</p>
-                <p class="card-value">2</p>
-                <a href="alerts.html" class="btn">Check alerts</a>
-            </div>
-        </div>
+        function getRiskColor(riskLevel) {
+            if (riskLevel === "LOW") return "green";
+            if (riskLevel === "MEDIUM") return "orange";
+            return "red";
+        }
 
-        <div class="dashboard">
-            <!-- Sidebar (Aligned to Left) -->
-            <aside class="sidebar">
-                <div class="logo">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-                <nav>
-                    <ul>
-                        <li class="active">
-                            <i class="fa-solid fa-house"></i>
-                            <span class="tooltip">Home</span>
-                        </li>
-                        <li>
-                            <a href="tools.html">
-                                <i class="bi bi-app-indicator custom-icon"></i>
-                                <span class="tooltip">Tools</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="settings.html">
-                                <i class="fa-solid fa-gear"></i>
-                                <span class="tooltip">Settings</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
-        </div>
-    </div>
+        function downloadReport() {
+            const supplierId = document.getElementById("supplierId").value.trim();
+            if (!supplierId) {
+                alert("Please enter a Supplier ID");
+                return;
+            }
+            window.open(`http://localhost:5001/api/suppliers/${supplierId}/report`);
+        }
+    </script>
 
-    <!-- Notifications Popup -->
-    <div class="notifications-popup" id="notificationsPopup">
-        <div class="notifications-header">
-            <h3>Notifications</h3>
-            <button class="close-notifications">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="notifications-list">
-            <div class="notification-item unread">
-                <div class="notification-icon">
-                    <i class="fas fa-temperature-high"></i>
-                </div>
-                <div class="notification-content">
-                    <p class="notification-text">Temperature alert: Shipment #4872 exceeding threshold</p>
-                    <span class="notification-time">2 minutes ago</span>
-                </div>
-            </div>
-            <div class="notification-item unread">
-                <div class="notification-icon">
-                    <i class="fas fa-truck"></i>
-                </div>
-                <div class="notification-content">
-                    <p class="notification-text">New shipment #4873 has been assigned to your account</p>
-                    <span class="notification-time">15 minutes ago</span>
-                </div>
-            </div>
-            <div class="notification-item">
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <p class="notification-text">Shipment #4871 delivered successfully</p>
-                    <span class="notification-time">1 hour ago</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <h2>Revolutionizing Medical Supply Chain</h2>
-            <p>Vitalink integrates advanced security protocols with IoT precision to transform pharmaceutical distribution. Our platform ensures that vital medications reach patients safely and efficiently, while maintaining complete transparency and regulatory compliance.</p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="script.js"></script>
-    <script src="notifications.js"></script>
 </body>
 </html>

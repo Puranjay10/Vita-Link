@@ -1,0 +1,54 @@
+### Get all suppliers
+GET http://localhost:5000/api/suppliers
+
+### Get a single supplier by ID (Replace {supplier_id} with an actual ID)
+GET http://localhost:5000/api/suppliers/{supplier_id}
+
+### Add a new supplier
+POST http://localhost:5000/api/suppliers
+Content-Type: application/json
+
+{
+  "name": "MediCorp",
+  "contact": "medicorp@example.com",
+  "location": "New York, USA"
+}
+
+### Update a supplier (Replace {supplier_id} with an actual ID)
+PUT http://localhost:5000/api/suppliers/{supplier_id}
+Content-Type: application/json
+
+{
+  "name": "Updated MediCorp",
+  "contact": "updated@example.com",
+  "location": "Los Angeles, USA"
+}
+
+### Delete a supplier (Replace {supplier_id} with an actual ID)
+DELETE http://localhost:5000/api/suppliers/{supplier_id}
+
+### Assess risk for a specific supplier (Replace {supplier_id} with an actual ID)
+GET http://localhost:5000/api/suppliers/{supplier_id}/risk
+
+### Test risk assessment
+GET http://localhost:5000/api/suppliers/{supplier_id}/risk
+
+### Create a supplier with risk assessment fields
+POST http://localhost:5000/api/suppliers
+Content-Type: application/json
+
+{
+    "name": "Test Supplier",
+    "email": "test@supplier.com",
+    "phone": "123-456-7890",
+    "address": "123 Test St",
+    "annualRevenue": 2000000,
+    "yearsInBusiness": 3,
+    "incidents": [
+        {
+            "type": "Delivery Delay",
+            "description": "Late delivery by 2 weeks",
+            "date": "2024-01-15"
+        }
+    ]
+}
