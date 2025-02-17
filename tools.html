@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitalink Tools</title>
+    <link rel="icon" href="./assets/vitaicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <!-- Background containers -->
+    <div id="particles-js"></div>
+    <div id="three-container"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-bolt"></i>
+        </div>
+        <nav>
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="tooltip">Home</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="tools.html">
+                        <i class="bi bi-app-indicator custom-icon"></i>
+                        <span class="tooltip">Tools</span>
+                    </a>
+                </li>
+                <li>
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="tooltip">Settings</span>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main">
+        <!-- Top Navigation Bar -->
+        <div class="navbar">
+            <div class="navbar-left">
+                <div class="icon">
+                    <img src="./assets/vitaicon.png">
+                </div>
+            </div>
+
+            <div class="searchbarr">
+                <input type="text" placeholder="Search here..." class="search-bar">
+            </div>
+
+            <div class="navbar-right">
+                <div class="bell">
+                    <a href="alerts.html">
+                        <i class="fa-solid fa-bell"></i>
+                    </a>
+                </div>
+                <div class="message">
+                    <a href="shipments.html">
+                        <i class="fa-regular fa-message"></i>
+                    </a>
+                </div>
+                <div class="user">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Cards Section -->
+        <div class="dashboard-cards">
+            <!-- PRM Card -->
+            <div class="tool-card">
+                <h2 class="tool-title">PRM</h2>
+                <h3 class="tool-subtitle">Procurement<br>Risk Mitigation</h3>
+                <button class="btn">Access PRM</button>
+            </div>
+
+            <!-- SRA Card -->
+            <div class="tool-card">
+                <h2 class="tool-title">SRA</h2>
+                <h3 class="tool-subtitle">Supply Risk<br>Assessment</h3>
+                <a href="sra.html" class="btn">Access SRA</a>
+            </div>
+
+            <!-- FM Card -->
+            <div class="tool-card">
+                <h2 class="tool-title">FM</h2>
+                <h3 class="tool-subtitle">Fleet<br>Management</h3>
+                <button class="btn">Access FM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
