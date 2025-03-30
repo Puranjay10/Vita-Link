@@ -1,1 +1,2 @@
-# Vita-Link
+Supply chain operations often face challenges like procurement risks, inefficient fleet management, unforeseen disruptions, and inaccurate forecasting, leading to delays and increased costs. 
+This project aims to develop a unified platform that streamlines procurement risk mitigation, optimizes fleet operations, enables proactive disruption detection, and simplifies demand forecasting—ensuring a more resilient and efficient supply chain.
